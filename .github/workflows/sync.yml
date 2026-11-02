@@ -1,7 +1,7 @@
 name: DA Blob Tracker
 on:
   schedule:
-    - cron: '16 21 * * 2,3,7'
+    - cron: '16 21 * * 2,3,0'
   workflow_dispatch:
 permissions:
   contents: write
@@ -16,6 +16,7 @@ jobs:
           sleep $((10 + RANDOM % 140))
           git config user.name "$(git log -1 --format='%an')"
           git config user.email "$(git log -1 --format='%ae')"
+          git pull --rebase origin main
           echo "- [$(date -u '+%Y-%m-%d %H:%M UTC')] Blob Base Fee: 1 wei | DA Utilization: $((35 + RANDOM % 50))%" >> blob-metrics.md
           MSGS=("chore: log eip4844 blob utilization" "docs: update da layer metrics" "sync: verify blob commitment")
           git add blob-metrics.md
